@@ -31,3 +31,12 @@ function custom_apt_repo__install_ti_packages() {
 		display_alert "Valid Options Would Have Been: ${valid_suites[@]}"
 	fi
 }
+
+function pre_customize_image__enable_services() {
+	run_host_command_logged "mkdir -p $DEST/lib/systemd/system/"
+	run_host_command_logged "cp -v $SRC/packages/bsp/ti/weston/weston.socket $SDCARD/lib/systemd/system/weston.socket"
+	run_host_command_logged "cp -v $SRC/packages/bsp/ti/weston/weston.service $SDCARD/lib/systemd/system/weston.service"
+	run_host_command_logged "cp -v $SRC/packages/bsp/ti/weston/weston $SDCARD/etc/default/weston"
+
+	chroot_sdcard "systemctl enable weston" || display_alert "systemctl enable failed"
+}
