@@ -48,3 +48,12 @@ function pre_customize_image__enable_services() {
 	chroot_sdcard "systemctl disable wpa_supplicant.service" || display_alert "systemctl disable for wpa_supplicant failed"
 	chroot_sdcard "systemctl enable NetworkManager" || display_alert "systemctl enable for NetworkManager failed"
 }
+
+function post_install_kernel_debs__activate_dkms() {
+    kernel_version=$(grab_version "${SRC}/cache/sources/${LINUXSOURCEDIR}")
+    kernel_version_family="${kernel_version}-${BRANCH}-${LINUXFAMILY}"
+
+    display_alert "DKMS Setup..."
+    chroot_sdcard "dkms autoinstall --verbose --kernelver ${kernel_version_family}"
+    display_alert "DKMS Setup Done"
+}
