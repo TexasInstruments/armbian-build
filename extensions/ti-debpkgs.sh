@@ -43,4 +43,8 @@ function pre_customize_image__enable_services() {
 	run_host_command_logged "cp -v $SRC/packages/bsp/ti/weston/weston $SDCARD/etc/default/weston"
 
 	chroot_sdcard "systemctl enable weston" || display_alert "systemctl enable failed"
+
+	chroot_sdcard "systemctl disable NetworkManager" || display_alert "systemctl disable for NetworkManager failed"
+	chroot_sdcard "systemctl disable wpa_supplicant.service" || display_alert "systemctl disable for wpa_supplicant failed"
+	chroot_sdcard "systemctl enable NetworkManager" || display_alert "systemctl enable for NetworkManager failed"
 }
