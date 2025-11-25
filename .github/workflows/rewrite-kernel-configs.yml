@@ -12,12 +12,12 @@ permissions:
 jobs:
   build-matrix:
     name: Build dynamic matrix
-    runs-on: ubuntu-latest
+    runs-on: super
     outputs:
       matrix: ${{ steps.gen.outputs.matrix }}
       count: ${{ steps.gen.outputs.count }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: "Produce inventory JSON"
         run: |
 
@@ -75,7 +75,7 @@ jobs:
       matrix:
         include: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -162,7 +162,7 @@ jobs:
 
       - name: Upload artifact (per job; unique; overwrite safe)
         if: steps.collect.outputs.nothing_to_upload != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: changes-${{ matrix.linuxfamily }}-${{ matrix.branch }}-${{ matrix.board }}-${{ github.run_attempt }}
           path: artifact/${{ matrix.linuxfamily }}-${{ matrix.branch }}-${{ matrix.board }}
@@ -175,13 +175,13 @@ jobs:
     needs: [build-matrix, rewrite-configs]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Download all change artifacts (no merge)
         continue-on-error: true
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           path: _artifacts
           pattern: changes-*
