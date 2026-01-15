@@ -3,7 +3,7 @@ bootdir=
 finduuid=part uuid \${boot} 1:2 uuid
 if test "${fdtfile}" = "ti/k3-am62l3-badge.dtb"; then
     rdaddr=0x84900000
-    setenv name_overlays ti/k3-am62l3-badge-eink-gdey042t81.dtbo
+    name_overlays=ti/k3-am62l3-badge-eink-gdey042t81.dtbo
 fi
 name_rd=uInitrd
 get_rd_mmc=load mmc ${bootpart} ${rdaddr} ${bootdir}/${name_rd}
