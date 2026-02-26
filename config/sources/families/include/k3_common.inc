@@ -10,6 +10,7 @@
 declare -g ARCH="arm64"
 declare -g OVERLAY_DIR="/boot/dtb/ti/overlay"
 declare -g BOOTSCRIPT="boot-k3.cmd:uEnv.txt"
+declare -g CLEAN_LEVEL="make-atf,make-uboot"
 
 declare -g INSTALL_HEADERS="yes"
 
