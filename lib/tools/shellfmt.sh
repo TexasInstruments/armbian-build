@@ -2,12 +2,12 @@
 #
 # SPDX-License-Identifier: GPL-2.0
 #
-# Copyright (c) 2013-2023 Igor Pecovnik, igor@armbian.com
+# Copyright (c) 2013-2026 Igor Pecovnik, igor@armbian.com
 #
 # This file is a part of the Armbian Build Framework
 # https://github.com/armbian/build/
 
-SHELLFMT_VERSION=${SHELLFMT_VERSION:-3.12.0} # https://github.com/mvdan/sh/releases/
+SHELLFMT_VERSION=${SHELLFMT_VERSION:-3.13.0} # https://github.com/mvdan/sh/releases/
 
 SRC="$(
 	cd "$(dirname "$0")/../.."
