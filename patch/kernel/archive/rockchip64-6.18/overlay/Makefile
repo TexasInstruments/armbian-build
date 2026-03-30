@@ -2,6 +2,7 @@
 dtbo-$(CONFIG_ARCH_ROCKCHIP) += \
 	hinlink-h88k-240x135-lcd.dtbo \
 	rk35xx-radxa-zero-3w-ext-ant.dtbo \
+	rk3308-uart1.dtbo rk3308-uart2.dtbo rk3308-uart3.dtbo \
 	rk3308-otg-host.dtbo \
 	rk3308-s0-ext-antenna.dtbo \
 	rk3308-b@1.3ghz.dtbo \
@@ -43,6 +44,16 @@ dtbo-$(CONFIG_ARCH_ROCKCHIP) += \
 	rockchip-rk3399-uart4.dtbo \
 	rockchip-rk3399-w1-gpio.dtbo \
 	rockchip-rk3566-sata2.dtbo \
+	rockchip-rk3566-i2c2-m1.dtbo \
+	rockchip-rk3566-i2c3-m0.dtbo \
+	rockchip-rk3566-i2c4-m0.dtbo \
+	rockchip-rk3566-pwm7.dtbo \
+	rockchip-rk3566-pwm11-m1.dtbo \
+	rockchip-rk3566-pwm15-m1.dtbo \
+	rockchip-rk3566-spi3-m0-cs0-spidev.dtbo \
+	rockchip-rk3566-uart3-m0.dtbo \
+	rockchip-rk3566-uart7-m2.dtbo \
+	rockchip-rk3566-uart9-m2.dtbo \
 	rockchip-rk3568-nanopi-r5c-leds.dtbo \
 	rockchip-rk3568-nanopi-r5s-leds.dtbo \
 	rockchip-rk3568-hk-i2c0.dtbo \
@@ -100,7 +111,8 @@ dtbo-$(CONFIG_ARCH_ROCKCHIP) += \
 	rockchip-rk3588-rkvenc-overlay.dtbo \
 	rockchip-rk3588-nanopi-m6-spi-nor-flash.dtbo \
 	rockchip-rk3588-nanopi-m6-display-dsi1-yx35.dtbo \
-	rockchip-rk3588-nanopc-t6-mmc-frequency.dtbo
+	rockchip-rk3588-nanopc-t6-mmc-frequency.dtbo \
+	rockchip-rk3588-odroidm2-weather-board-zero.dtbo
 
 scr-$(CONFIG_ARCH_ROCKCHIP) += \
        rockchip-fixup.scr

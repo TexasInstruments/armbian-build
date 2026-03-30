@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-2.0
 #
-# Copyright (c) 2013-2023 Igor Pecovnik, igor@armbian.com
+# Copyright (c) 2013-2026 Igor Pecovnik, igor@armbian.com
 #
 # This file is a part of the Armbian Build Framework
 # https://github.com/armbian/build/
@@ -296,7 +296,12 @@ function fetch_from_repo() {
 
 					display_alert "Updating submodule" "${name} - ${surl} - ${sref}" "git"
 					git_ensure_safe_directory "$workdir/$path"
-					fetch_from_repo "$surl" "$workdir/$path" "$sref"
+
+					if [[ "${GIT_FIXED_WORKDIR}" != "" ]]; then
+						GIT_FIXED_WORKDIR="${GIT_FIXED_WORKDIR}/${path}" fetch_from_repo "$surl" "$workdir/$path" "$sref"
+					else
+						fetch_from_repo "$surl" "$workdir/$path" "$sref"
+					fi
 
 				done < <(git config -f .gitmodules --get-regexp 'submodule\..*\.path')
 			fi
