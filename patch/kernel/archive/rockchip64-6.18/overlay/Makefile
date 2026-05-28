@@ -37,6 +37,7 @@ dtbo-$(CONFIG_ARCH_ROCKCHIP) += \
 	rockchip-rk3399-dwc3-0-host.dtbo \
 	rockchip-rk3399-i2c7.dtbo \
 	rockchip-rk3399-i2c8.dtbo \
+	rockchip-rk3399-helios64-cpu-stability.dtbo \
 	rockchip-rk3399-opp-2ghz.dtbo \
 	rockchip-rk3399-pcie-gen2.dtbo \
 	rockchip-rk3399-spi-jedec-nor.dtbo \
@@ -67,6 +68,7 @@ dtbo-$(CONFIG_ARCH_ROCKCHIP) += \
 	rockchip-rk3568-hk-uart1.dtbo \
 	rockchip-rk3568-rock-3a-disable-uart2.dtbo \
 	rockchip-rk3588-fanctrl.dtbo \
+	rockchip-rk3588-rock-5-itx-pwm-fan.dtbo \
 	rockchip-rk3588-sata0.dtbo \
 	rockchip-rk3588-sata1.dtbo \
 	rockchip-rk3588-sata2.dtbo \
@@ -112,7 +114,8 @@ dtbo-$(CONFIG_ARCH_ROCKCHIP) += \
 	rockchip-rk3588-nanopi-m6-spi-nor-flash.dtbo \
 	rockchip-rk3588-nanopi-m6-display-dsi1-yx35.dtbo \
 	rockchip-rk3588-nanopc-t6-mmc-frequency.dtbo \
-	rockchip-rk3588-odroidm2-weather-board-zero.dtbo
+	rockchip-rk3588-odroidm2-weather-board-zero.dtbo \
+	rockchip-rk3588-odroidm2-display-vu8s.dtbo
 
 scr-$(CONFIG_ARCH_ROCKCHIP) += \
        rockchip-fixup.scr
@@ -123,4 +126,3 @@ dtbotxt-$(CONFIG_ARCH_ROCKCHIP) += \
 dtb-y += $(dtbo-y) $(scr-y) $(dtbotxt-y)
 
 clean-files    := *.dtbo *.scr
-
