@@ -1,4 +1,4 @@
-function post_repo_customize_image__install_ti_packages() {
+function post_repo_customize_image__100_install_ti_packages() {
 
     # Read JSON array into Bash array safely
 	mapfile -t valid_suites < <(
@@ -37,7 +37,7 @@ function post_repo_customize_image__install_ti_packages() {
 	fi
 }
 
-function pre_customize_image__enable_services() {
+function post_repo_customize_image__200_enable_services() {
 	run_host_command_logged "mkdir -p $DEST/lib/systemd/system/"
 	run_host_command_logged "cp -v $SRC/packages/bsp/ti/weston/weston.socket $SDCARD/lib/systemd/system/weston.socket"
 	run_host_command_logged "cp -v $SRC/packages/bsp/ti/weston/weston.service $SDCARD/lib/systemd/system/weston.service"
@@ -50,7 +50,7 @@ function pre_customize_image__enable_services() {
 	chroot_sdcard "systemctl enable NetworkManager" || display_alert "systemctl enable for NetworkManager failed"
 }
 
-function post_install_kernel_debs__activate_dkms() {
+function post_repo_customize_image__300_activate_dkms() {
     if [[ ${GPU_SUPPORT} == "yes" ]] ; then
         kernel_version=$(grab_version "${SRC}/cache/sources/${LINUXSOURCEDIR}")
         kernel_version_family="${kernel_version}-${BRANCH}-${LINUXFAMILY}"
@@ -58,7 +58,7 @@ function post_install_kernel_debs__activate_dkms() {
     fi
 }
 
-function post_customize_image__rm_aptconf() {
+function post_repo_customize_image__400_rm_aptconf() {
     display_alert "Removing apt.conf file"
     run_host_command_logged "rm -f ${SDCARD}/etc/apt/apt.conf"
     chroot_sdcard_apt_get_update || true
