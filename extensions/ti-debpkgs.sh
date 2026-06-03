@@ -24,6 +24,16 @@ function post_repo_customize_image__100_install_ti_packages() {
 		chroot_sdcard "mkdir -p /etc/apt/preferences.d/"
 		run_host_command_logged "cp \"$SRC/packages/bsp/ti/ti-debpkgs/ti-debpkgs\" \"$SDCARD/etc/apt/preferences.d/\""
 
+		# Remove excluded packages
+		if [[ ${#TI_PACKAGES_REMOVE[@]} -gt 0 ]] ; then
+			for rm_pkg in "${TI_PACKAGES_REMOVE[@]}" ; do
+				for i in "${!TI_PACKAGES[@]}" ; do
+					[[ "${TI_PACKAGES[$i]}" == "${rm_pkg}" ]] && unset "TI_PACKAGES[$i]"
+				done
+			done
+			TI_PACKAGES=("${TI_PACKAGES[@]}")
+		fi
+
 		# Install packages
 		if [[ ${#TI_PACKAGES[@]} -gt 0 ]] ; then
 			do_with_retries 3 chroot_sdcard_apt_get_update

@@ -38,7 +38,7 @@ fi
 if [[ "${BOOT_SOC}" != "am62l" ]]; then
 	TI_PACKAGES+=("firmware-ti-ipc-${SOC_ID}")
 else
-	TI_PACKAGES+=("ti-lvgl-demo" "inky")
+	TI_PACKAGES+=("ti-lvgl-demo")
 fi
 
 TI_PACKAGES+=("firmware-cnm-wave")
