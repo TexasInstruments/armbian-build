@@ -1,0 +1,121 @@
+From 3a9ea60f537bff88b0d5697cc56782f673b3e65d Mon Sep 17 00:00:00 2001
+From: Devarsh Thakkar <devarsht@ti.com>
+Date: Fri, 19 Dec 2025 03:27:55 +0530
+Subject: [PATCH] PENDING: arm64: dts: ti: Add overlay for GDEY042T81 e-ink on
+ AM62L Badge
+
+Add device tree overlay for GoodDisplay GDEY042T81 4.2" e-ink display
+on AM62L Badge. This overlay configures SPI0 interface and
+GPIO pins for display control (DC, Reset, Busy).
+
+Forward-ported Makefile context from ti-linux-6.12.y-cicd to match
+ti-linux-6.18.y Makefile layout.
+
+Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+Tested-by: Judith Mendez <jm@ti.com>
+---
+ arch/arm64/boot/dts/ti/Makefile               |  4 ++
+ .../ti/k3-am62l3-badge-eink-gdey042t81.dtso   | 63 +++++++++++++++++++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62l3-badge-eink-gdey042t81.dtso
+
+diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+--- a/arch/arm64/boot/dts/ti/Makefile
++++ b/arch/arm64/boot/dts/ti/Makefile
+@@ -64,6 +64,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-am62l3-evm-pwm.dtbo
+ dtb-$(CONFIG_ARCH_K3) += k3-am62l3-badge.dtb
+
+ # Boards with AM62Lx SoCs
++dtb-$(CONFIG_ARCH_K3) += k3-am62l3-badge-eink-gdey042t81.dtbo
+ dtb-$(CONFIG_ARCH_K3) += k3-am62l3-evm.dtb
+ dtb-$(CONFIG_ARCH_K3) += k3-am62l3-evm-dsi-rpi-7inch-panel.dtbo
+ dtb-$(CONFIG_ARCH_K3) += k3-am62l3-evm-lpm-wkup-sources.dtbo
+@@ -432,6 +432,8 @@ k3-j784s4-evm-usxgmii-exp1-exp2-dtbs := k3-j784s4-evm.dtb \
+ 	k3-j784s4-evm-usxgmii-exp1-exp2.dtbo
+ k3-am62l3-evm-dsi-rpi-7inch-panel-dtbs := k3-am62l3-evm.dtb \
+ 	k3-am62l3-evm-dsi-rpi-7inch-panel.dtbo
++k3-am62l3-badge-eink-gdey042t81-dtbs := k3-am62l3-badge.dtb \
++	k3-am62l3-badge-eink-gdey042t81.dtbo
+ k3-am62l3-evm-nand-dtbs := k3-am62l3-evm.dtb \
+ 	k3-am62l3-evm-nand.dtbo
+ k3-am62l3-evm-tida-010939-dtbs := k3-am62l3-evm.dtb \
+@@ -521,6 +521,7 @@ dtb- += k3-am625-beagleplay-csi2-ov5640.dtb \
+ 	k3-j784s4-evm-usb0-type-a.dtb \
+ 	k3-j784s4-evm-usxgmii-exp1-exp2.dtb \
+ 	k3-am62l3-evm-dsi-rpi-7inch-panel.dtb \
++	k3-am62l3-badge-eink-gdey042t81.dtb \
+ 	k3-am62l3-evm-tida-010939.dtb \
+ 	k3-am62l3-evm-idle-states.dtb
+
+diff --git a/arch/arm64/boot/dts/ti/k3-am62l3-badge-eink-gdey042t81.dtso b/arch/arm64/boot/dts/ti/k3-am62l3-badge-eink-gdey042t81.dtso
+new file mode 100644
+index 000000000000..dee98b365873
+--- /dev/null
++++ b/arch/arm64/boot/dts/ti/k3-am62l3-badge-eink-gdey042t81.dtso
+@@ -0,0 +1,63 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/**
++ * DT Overlay for GoodDisplay GDEY042T81 E-Ink Display on AM62L Badge
++ *
++ * Copyright (C) 2025 Texas Instruments Incorporated - https://www.ti.com/
++ */
++
++/dts-v1/;
++/plugin/;
++
++#include <dt-bindings/gpio/gpio.h>
++#include "k3-pinctrl.h"
++
++&pmx0 {
++
++	dc_pins_default: dc-default-pins {
++		pinctrl-single,pins = <
++			AM62LX_IOPAD(0x01ac, PIN_OUTPUT, 7) /* (E12) SPI0_D0.GPIO0_90 */
++		>;
++	};
++
++	res_pins_default: res-default-pins {
++		pinctrl-single,pins = <
++			AM62LX_IOPAD(0x009c, PIN_OUTPUT, 7) /* (H20) GPMC0_AD9.GPIO0_24 */
++		>;
++	};
++
++	busy_pins_default: busy-default-pins {
++		pinctrl-single,pins = <
++			AM62LX_IOPAD(0x00dc, PIN_INPUT, 7) /* (N21) GPMC0_WPn.GPIO0_39 */
++		>;
++	};
++
++	main_spi0_pins_default: main-spi0-default-pins {
++		pinctrl-single,pins = <
++			AM62LX_IOPAD(0x01a8, PIN_OUTPUT, 0) /* (E13) SPI0_CLK */
++			AM62LX_IOPAD(0x01a0, PIN_OUTPUT, 0) /* (E11) SPI0_CS0 */
++			AM62LX_IOPAD(0x01b0, PIN_OUTPUT, 0) /* (B12) SPI0_D1 */
++		>;
++	};
++
++};
++
++&spi0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_spi0_pins_default>;
++	status = "okay";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	spidev@0 {
++		compatible = "gooddisplay,gdey042t81";
++		reg = <0>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&dc_pins_default>,
++			    <&res_pins_default>,
++			    <&busy_pins_default>;
++		spi-max-frequency = <2000000>;
++		reset-gpios = <&gpio0 24 GPIO_ACTIVE_LOW>;
++		dc-gpios = <&gpio0 90 GPIO_ACTIVE_HIGH>;
++		busy-gpios = <&gpio0 39 GPIO_ACTIVE_HIGH>;
++	};
++};
+--
+2.34.1
+

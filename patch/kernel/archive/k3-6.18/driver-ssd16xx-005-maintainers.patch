@@ -1,0 +1,34 @@
+From 20260430183311.2978142-6-devarsht@ti.com Mon Sep 17 00:00:00 2001
+From: Devarsh Thakkar <devarsht@ti.com>
+Date: Fri, 1 May 2026 00:03:10 +0530
+Subject: [PATCH] MAINTAINERS: Add entry for Solomon SSD16xx DRM driver
+
+Add maintainer entry for the panel-ssd16xx DRM driver covering the SSD16xx
+e-ink display controller family (SSD1673, SSD1680, SSD1681, SSD1683).
+
+Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8e80296449ba..3a01544dbc50 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8377,6 +8377,13 @@ F:	Documentation/devicetree/bindings/display/solomon,ssd-common.yaml
+ F:	Documentation/devicetree/bindings/display/solomon,ssd13*.yaml
+ F:	drivers/gpu/drm/solomon/ssd130x*
+ 
++DRM DRIVER FOR SOLOMON SSD16XX E-PAPER DISPLAY CONTROLLERS
++M:	Devarsh Thakkar <devarsht@ti.com>
++S:	Maintained
++T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
++F:	Documentation/devicetree/bindings/display/solomon,ssd16xx.yaml
++F:	drivers/gpu/drm/tiny/panel-ssd16xx.c
++
+ DRM DRIVER FOR ST-ERICSSON MCDE
+ M:	Linus Walleij <linusw@kernel.org>
+ S:	Maintained
+-- 
+2.39.1
+
+

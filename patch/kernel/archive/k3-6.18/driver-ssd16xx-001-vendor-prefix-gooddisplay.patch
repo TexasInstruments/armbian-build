@@ -1,0 +1,32 @@
+From 20260430183311.2978142-2-devarsht@ti.com Mon Sep 17 00:00:00 2001
+From: Devarsh Thakkar <devarsht@ti.com>
+Date: Fri, 1 May 2026 00:03:06 +0530
+Subject: [PATCH] dt-bindings: vendor-prefixes: Add Dalian Good Display Co., Ltd.
+
+Add vendor prefix 'gooddisplay' for Dalian Good Display Co., Ltd., a
+manufacturer of e-paper display panels and modules.
+
+This prefix will be used for the GDEY042T81 e-paper display panel in
+the solomon,ssd16xx binding.
+
+Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 00bffb9c4469..04daa3245919 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -662,6 +662,8 @@ patternProperties:
+     description: GOcontroll Modular Embedded Electronics B.V.
+   "^goldelico,.*":
+     description: Golden Delicious Computers GmbH & Co. KG
++  "^gooddisplay,.*":
++    description: Dalian Good Display Co., Ltd.
+   "^goodix,.*":
+     description: Shenzhen Huiding Technology Co., Ltd.
+   "^google,.*":
+-- 
+2.39.1
+
+

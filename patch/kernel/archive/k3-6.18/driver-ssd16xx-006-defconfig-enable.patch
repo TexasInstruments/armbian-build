@@ -1,0 +1,29 @@
+From 20260430183311.2978142-7-devarsht@ti.com Mon Sep 17 00:00:00 2001
+From: Devarsh Thakkar <devarsht@ti.com>
+Date: Fri, 1 May 2026 00:03:11 +0530
+Subject: [PATCH] arm64: defconfig: Enable DRM_PANEL_SSD16XX
+
+Enable the Solomon SSD16xx e-ink display controller driver as a module
+in the arm64 defconfig, making it available by default on TI AM6x SoC
+platforms that use this driver.
+
+Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 430219656640..0815384f955f 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -995,6 +995,7 @@ CONFIG_DRM_PANEL_RAYDIUM_RM67191=m
+ CONFIG_DRM_PANEL_RAYDIUM_RM692E5=m
+ CONFIG_DRM_PANEL_SAMSUNG_ATNA33XC20=m
+ CONFIG_DRM_PANEL_SITRONIX_ST7703=m
++CONFIG_DRM_PANEL_SSD16XX=m
+ CONFIG_DRM_PANEL_STARTEK_KD070FHFID015=m
+ CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA=m
+ CONFIG_DRM_PANEL_VISIONOX_VTDR6130=m
+-- 
+2.39.1
+
+

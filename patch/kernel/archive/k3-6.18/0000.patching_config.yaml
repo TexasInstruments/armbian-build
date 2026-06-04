@@ -1,0 +1,9 @@
+config:
+
+  name: k3-6.18
+  kind: kernel
+  type: vendor
+  branch: ti-linux-6.18.y
+  maintainers:
+    - { github: jonaswood01, name: Jonas Wood, email: jw@ti.com }
+    - { github: Grippy98, name: Andrei Aldea, email: andrei@ti.com }
