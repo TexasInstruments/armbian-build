@@ -1,7 +1,7 @@
 bootpart=1:1
 bootdir=
 finduuid=part uuid \${boot} 1:2 uuid
-check_beaglebadge=if test "${fdtfile}" = "ti/k3-am62l3-badge.dtb"; then setenv rdaddr 0x84900000; setenv name_overlays ti/k3-am62l3-badge-eink-gdey042t81.dtbo; fi
+check_beaglebadge=if test "${fdtfile}" = "ti/k3-am62l3-beaglebadge.dtb"; then setenv rdaddr 0x84900000; setenv name_overlays ti/k3-am62l3-badge-eink-gdey042t81.dtbo; fi
 name_rd=uInitrd
 get_rd_mmc=load mmc ${bootpart} ${rdaddr} ${bootdir}/${name_rd}
 
