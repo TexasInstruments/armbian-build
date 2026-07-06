@@ -37,7 +37,7 @@ function post_repo_customize_image__100_install_ti_packages() {
 		# Install packages
 		if [[ ${#TI_PACKAGES[@]} -gt 0 ]] ; then
 			do_with_retries 3 chroot_sdcard_apt_get_update
-			do_with_retries 3 chroot_sdcard_apt_get_install "${TI_PACKAGES[@]}"
+			do_with_retries 3 chroot_sdcard_apt_get -o "Dpkg::Options::=--force-overwrite" --no-install-recommends install "${TI_PACKAGES[@]}"
 		fi
 
 	else
