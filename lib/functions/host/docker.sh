@@ -142,6 +142,37 @@ function docker_cli_prepare() {
 	# declare -g DOCKER_ARMBIAN_BASE_IMAGE="${DOCKER_ARMBIAN_BASE_IMAGE:-"debian:trixie"}"
 	# declare -g DOCKER_ARMBIAN_BASE_IMAGE="${DOCKER_ARMBIAN_BASE_IMAGE:-"debian:bookworm"}"
 	# declare -g DOCKER_ARMBIAN_BASE_IMAGE="${DOCKER_ARMBIAN_BASE_IMAGE:-"debian:sid"}"
+	if [[ -z "${DOCKER_ARMBIAN_BASE_IMAGE}" && -n "${BOARD}" ]]; then
+		local _line="$(grep -i 'DOCKER_ARMBIAN_BASE_IMAGE=' ${SRC}/config/boards/${BOARD}.conf 2>/dev/null | tail -n 1)"
+		local -l _probe_docker_image="${_line##*=}"; _probe_docker_image="${_probe_docker_image//[\"\'[:space:]]/}"; _probe_docker_image="${_probe_docker_image%%#*}"
+		if [[ -z "${_probe_docker_image}" ]]; then
+			unset _line; _line="$(grep -i 'BOARDFAMILY=' ${SRC}/config/boards/${BOARD}.conf 2>/dev/null | tail -n 1)"
+			local -l _probe_family="${_line##*=}"; _probe_family="${_probe_family//[\"\'[:space:]]/}"; _probe_family="${_probe_family%%#*}"
+			if [[ -n "${_probe_family}" ]]; then
+				unset _line; _line="$(grep -i 'DOCKER_ARMBIAN_BASE_IMAGE=' ${SRC}/config/sources/families/${_probe_family}.conf 2>/dev/null | tail -n 1)"
+				_probe_docker_image="${_line##*=}"; _probe_docker_image="${_probe_docker_image//[\"\'[:space:]]/}"; _probe_docker_image="${_probe_docker_image%%#*}"
+				if [[ -z "${_probe_docker_image}" ]]; then
+					while IFS= read -r _line; do
+						local -l _probe_family_include="${_line##*/include/}"; _probe_family_include="${_probe_family_include//[\"\'[:space:]]/}"; _probe_family_include="${_probe_family_include%%#*}"
+						[[ -z "${_probe_family_include}" ]] && continue
+						unset _line; _line="$(grep -i 'DOCKER_ARMBIAN_BASE_IMAGE=' ${SRC}/config/sources/families/include/${_probe_family_include} 2>/dev/null | tail -n 1)"
+						_probe_docker_image="${_line##*=}"; _probe_docker_image="${_probe_docker_image//[\"\'[:space:]]/}"; _probe_docker_image="${_probe_docker_image%%#*}"
+						[[ -n "${_probe_docker_image}" ]] && break
+					done < <(grep -i '^source.*BASH_SOURCE.*/include/.*\.inc' ${SRC}/config/sources/families/${_probe_family}.conf 2>/dev/null)
+				fi
+			fi
+		fi
+		[[ -n "${_probe_docker_image}" ]] && declare -g DOCKER_ARMBIAN_BASE_IMAGE="${_probe_docker_image}"
+	fi
+	if [[ -z "${DOCKER_ARMBIAN_BASE_IMAGE}" && -n "${RELEASE}" ]]; then
+		case "${RELEASE}" in
+			bookworm)	declare -g DOCKER_ARMBIAN_BASE_IMAGE="debian:bookworm" ;;
+			trixie)		declare -g DOCKER_ARMBIAN_BASE_IMAGE="debian:trixie" ;;
+			jammy)		declare -g DOCKER_ARMBIAN_BASE_IMAGE="ubuntu:jammy" ;;
+			noble)		declare -g DOCKER_ARMBIAN_BASE_IMAGE="ubuntu:noble" ;;
+			resolute)	declare -g DOCKER_ARMBIAN_BASE_IMAGE="ubuntu:resolute" ;;
+		esac
+	fi
 	declare -g DOCKER_ARMBIAN_BASE_IMAGE="${DOCKER_ARMBIAN_BASE_IMAGE:-"ubuntu:noble"}"
 	declare -g DOCKER_ARMBIAN_TARGET_PATH="${DOCKER_ARMBIAN_TARGET_PATH:-"/armbian"}"
 

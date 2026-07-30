@@ -312,6 +312,24 @@ function do_main_configuration() {
 	###
 	source_family_config_and_arch
 
+	# If the family config declared a specific Docker base image and we're running in the wrong
+	# container (e.g. Docker launched before DOCKER_ARMBIAN_BASE_IMAGE was set), signal the
+	# host to restart Docker with the correct image.
+	if [[ "${ARMBIAN_RUNNING_IN_CONTAINER}" == "yes" && -n "${DOCKER_ARMBIAN_BASE_IMAGE}" ]]; then
+		local _running_docker_image="$(source /etc/os-release 2>/dev/null; echo "${VERSION_CODENAME:-}")"
+		if [[ -n "${_running_docker_image}" && "${_running_docker_image}" != "${DOCKER_ARMBIAN_BASE_IMAGE##*:}" ]]; then
+			display_alert "Docker base image mismatch" "running ${_running_docker_image}, board requires ${DOCKER_ARMBIAN_BASE_IMAGE##*:} -- restarting" "wrn"
+			mkdir -p "${DEST}"
+			{
+				echo "DOCKER_ARMBIAN_BASE_IMAGE=${DOCKER_ARMBIAN_BASE_IMAGE}"
+				for _ic_key in "${!ARMBIAN_INTERACTIVE_CONFIGS[@]}"; do
+					echo "${_ic_key}=${ARMBIAN_INTERACTIVE_CONFIGS[${_ic_key}]}"
+				done
+			} > "${DEST}/docker-restart-image-${ARMBIAN_BUILD_UUID}"
+			exit 43
+		fi
+	fi
+
 	if [[ "$HAS_VIDEO_OUTPUT" == "no" ]]; then
 		PLYMOUTH="no"
 		[[ $BUILD_DESKTOP != "no" ]] && exit_with_error "HAS_VIDEO_OUTPUT is set to no. So we shouldn't build desktop environment"

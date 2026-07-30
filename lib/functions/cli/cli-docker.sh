@@ -103,6 +103,43 @@ function cli_docker_run() {
 			declare -i docker_exit_code docker_produced_logs=0
 			docker_cli_launch # MARK: this "re-launches"
 
+			# If the container requested a restart with a different base image (exit 43), honor it.
+			if [[ ${docker_exit_code} -eq 43 ]]; then
+				local _restart_file="${DEST}/docker-restart-image-${ARMBIAN_BUILD_UUID}"
+				if [[ -f "${_restart_file}" ]]; then
+					while IFS= read -r _line; do
+						_key="${_line%%=*}"
+						_value="${_line#*=}"
+						case "${_key}" in
+							DOCKER_ARMBIAN_BASE_IMAGE)
+								DOCKER_ARMBIAN_BASE_IMAGE="${_value}"
+								ARMBIAN_CLI_RELAUNCH_PARAMS+=(["DOCKER_ARMBIAN_BASE_IMAGE"]="${DOCKER_ARMBIAN_BASE_IMAGE}")
+								;;
+							*)
+								[[ -n "${_key}" ]] && ARMBIAN_CLI_RELAUNCH_PARAMS+=(["${_key}"]="${_value}")
+								;;
+						esac
+					done < "${_restart_file}"
+					rm -f "${_restart_file}"
+					display_alert "Restarting Docker" "will use docker base image ${DOCKER_ARMBIAN_BASE_IMAGE}" "info"
+					produce_relaunch_parameters
+					declare -i docker_exit_code=0 docker_produced_logs=0
+					LOG_SECTION="docker_cli_prepare" do_with_logging docker_cli_prepare
+					if [[ "${FAST_DOCKER:-"no"}" != "yes" ]]; then
+						declare -g docker_prepare_cli_skip_exts="yes"
+						LOG_SECTION="docker_cli_prepare_dockerfile" do_with_logging docker_cli_prepare_dockerfile
+						unset docker_prepare_cli_skip_exts
+						LOG_SECTION="docker_cli_build_dockerfile" do_with_logging docker_cli_build_dockerfile
+					fi
+					LOG_SECTION="docker_cli_prepare_launch" do_with_logging docker_cli_prepare_launch
+					for env in "${ARMBIAN_CLI_FINAL_RELAUNCH_ENVS[@]}"; do
+						display_alert "Adding Docker env" "${env}" "debug"
+						DOCKER_ARGS+=("--env" "${env}")
+					done
+					docker_cli_launch
+				fi
+			fi
+
 			# Set globals to avoid:
 			# 1) showing the controlling host's log; we only want to show a ref to the Docker logfile, unless it didn't produce one.
 			#    If it did produce one, it's "link" is already shown above.
