@@ -23,7 +23,7 @@ function check_loop_device_internal() {
 	if [[ ! -b "${device}" ]]; then
 		if [[ $CONTAINER_COMPAT == yes && -b "/tmp/${device}" ]]; then
 			display_alert "Creating device node" "${device}"
-			run_host_command_logged mknod -m0660 "${device}" b "0x$(stat -c '%t' "/tmp/${device}")" "0x$(stat -c '%T' "/tmp/${device}")"
+			run_host_command_logged mknod -m0660 "${device}" b "$(( 16#$(stat -c '%t' "/tmp/${device}") ))" "$(( 16#$(stat -c '%T' "/tmp/${device}") ))"
 			if [[ ! -b "${device}" ]]; then # try again after creating node
 				return 1                       # fail, it will be retried, and should exist on next retry.
 			else
