@@ -53,12 +53,25 @@ enable_extension "apa"
 
 case "${BRANCH}" in
 
-	edge)	# experimental (limited testing): uses latest bleeding-edge upstream mainline version
+	current)	# experimental (limited testing): uses latest LTS upstream mainline version
 
-		# KERNELSOURCE defined in mainline-config.sh
-		# KERNELBRANCH defined in mainline-kernel.conf.sh
+		declare -g KERNELSOURCE="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux"
+		declare -g KERNELBRANCH="master"
 		declare -g KERNEL_MAJOR_MINOR="6.18"							# needs updating with each minor kernel release
-		declare -g KERNEL_DESCRIPTION="Latest upstream mainline kernel"
+		declare -g KERNEL_DESCRIPTION="Latest LTS upstream mainline kernel"
+		declare -g ATFBRANCH="branch:master"
+		declare -g OPTEE_BRANCH="branch:master"
+		declare -g TI_LINUX_FIRMWARE_BRANCH="branch:ti-linux-firmware"
+		declare -g BOOTSOURCE="https://github.com/u-boot/u-boot"
+		declare -g BOOTBRANCH="branch:master"
+		;;
+
+	edge)		# experimental (limited testing): uses latest bleeding-edge upstream mainline version
+
+		declare -g KERNELSOURCE="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux"
+		declare -g KERNELBRANCH="master"
+		declare -g KERNEL_MAJOR_MINOR="6.18"							# needs updating with each minor kernel release
+		declare -g KERNEL_DESCRIPTION="Latest bleeding-edge upstream mainline kernel"
 		declare -g ATFBRANCH="branch:master"
 		declare -g OPTEE_BRANCH="branch:master"
 		declare -g TI_LINUX_FIRMWARE_BRANCH="branch:ti-linux-firmware"
