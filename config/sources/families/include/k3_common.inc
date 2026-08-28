@@ -24,7 +24,7 @@ fi
 
 if [[ "${GPU_SUPPORT}" == "yes" ]] ; then
 	TI_PACKAGES+=("ti-img-rogue-driver-${SOC_ID}-dkms" "ti-img-rogue-umlibs-${SOC_ID}" "ti-img-rogue-tools-${SOC_ID}" "ti-img-rogue-firmware-${SOC_ID}")
-	TI_PACKAGES+=("mesa-pvr-vulkan-drivers" "libgl1-mesa-pvr-dri")
+	TI_PACKAGES+=("libgbm1-pvr" "libegl-mesa0-pvr" "libgl1-mesa-dri-pvr" "libgles2-mesa-pvr" "mesa-libgallium-pvr" "mesa-vulkan-drivers-pvr")
     TI_PACKAGES+=("gstreamer1.0-tools" "gstreamer1.0-plugins-good" "gstreamer1.0-plugins-bad" "gstreamer1.0-plugins-base")
 
 	if [[ "${CHROMIUM_SUPPORT}" == "yes" ]] ; then
