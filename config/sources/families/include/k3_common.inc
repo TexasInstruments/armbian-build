@@ -99,10 +99,23 @@ function compile_k3_bootgen() {
 	(fetch_from_repo "https://github.com/TexasInstruments/ti-linux-firmware" "ti-linux-firmware" ${TI_LINUX_FIRMWARE_BRANCH})
 
 	if [[ "${BOOT_SOC}" != "am62l" ]]; then
+		# Distro default toolchain may overflow SPL size limit when compiling u-boot R5.
+		# Use ARM GNU Toolchain 15.2rel1 specifically for this step, then remove.
+		local _tc_name="arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-linux-gnueabihf"
+		local _tc_dir="${SRC}/cache/toolchains/${_tc_name}"
+		local _tc_url="https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/${_tc_name}.tar.xz"
+		mkdir -p "${SRC}/cache/toolchains"
+		display_alert "Download/extract ARM GNU Toolchain 15.2rel1 for R5 U-Boot..." "${_tc_name}" "info"
+		run_host_command_logged wget -nv -O "${_tc_dir}.tar.xz" "${_tc_url}"
+		run_host_command_logged tar -xf "${_tc_dir}.tar.xz" -C "${SRC}/cache/toolchains/"
+
 		pushd ${SRC}/cache/sources/u-boot-worktree/${BOOTDIR}/${BOOTBRANCH##*:} || exit
-		run_host_command_logged make -j$(nproc) CROSS_COMPILE=arm-linux-gnueabi- ARCH=arm O=build-r5 ${TIBOOT3_BOOTCONFIG}
-		run_host_command_logged make -j$(nproc) CROSS_COMPILE=arm-linux-gnueabi- ARCH=arm O=build-r5 BINMAN_INDIRS=${SRC}/cache/sources/ti-linux-firmware
+		run_host_command_logged make -j$(nproc) CROSS_COMPILE=${_tc_dir}/bin/arm-none-linux-gnueabihf- ARCH=arm O=build-r5 ${TIBOOT3_BOOTCONFIG}
+		run_host_command_logged make -j$(nproc) CROSS_COMPILE=${_tc_dir}/bin/arm-none-linux-gnueabihf- ARCH=arm O=build-r5 BINMAN_INDIRS=${SRC}/cache/sources/ti-linux-firmware
 		popd
+
+		display_alert "Remove downloaded ARM GNU Toolchain 15.2rel1..." "${_tc_name}" "info"
+		run_host_command_logged rm -rf "${_tc_dir}"*
 	fi
 }
 
